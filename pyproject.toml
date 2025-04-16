@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ib-trading-bot"
+version = "0.1.0"
+description = "A simple automated trading bot using IB-insync"
+authors = [{ name = "yywuzhanfei", email = "yywuzhanfei@gmail.com" }]
+dependencies = [
+    "ib_insync>=0.9.83",
+    "python-dotenv",
+    "pandas",
+    "numpy"
+]

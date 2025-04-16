@@ -1,0 +1,48 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.env/
+.envrc
+*.env
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# PyInstaller output
+*.spec
+
+# Logs
+*.log
+
+# macOS
+.DS_Store
+
+# Test coverage
+.coverage
+htmlcov/
+.coverage.*
+
+# Ignore local config or secret files
+config.yaml
+secrets.json
+
+# IB Gateway or TWS logs (if any)
+log/
+*.xml
+
+# Pid files (for daemonized bots)
+*.pid
