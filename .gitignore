@@ -46,3 +46,5 @@ log/
 
 # Pid files (for daemonized bots)
 *.pid
+
+ib-goog-sheet-credentials.json
