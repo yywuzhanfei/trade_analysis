@@ -106,12 +106,7 @@ def serialize_position(ib, pos: Position) -> Dict[str, object]:
     }
 
 
-def main() -> None:
-    ib = connect_ib()
-    if not ib:
-        logger.error("Failed to connect to Interactive Brokers.")
-        return
-
+def sync_positions(ib) -> Dict[str, int]:
     positions = ib.positions(account=ACCOUNT)
     existing_pages = fetch_existing_notion_position_pages()
     uploaded = 0
@@ -127,7 +122,18 @@ def main() -> None:
                 uploaded += 1
 
     logger.info(f"Synced positions to Notion. Created: {uploaded}, Updated: {updated}")
-    ib.disconnect()
+    return {"created": uploaded, "updated": updated}
+
+
+def main() -> None:
+    ib = connect_ib()
+    if not ib:
+        logger.error("Failed to connect to Interactive Brokers.")
+        return
+    try:
+        sync_positions(ib)
+    finally:
+        ib.disconnect()
 
 
 if __name__ == "__main__":

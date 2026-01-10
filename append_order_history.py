@@ -85,31 +85,33 @@ def fetch_new_ib_trades(ib):
 
     return list(aggregated_records.values())
 
+def sync_order_history(ib) -> int:
+    """Synchronize IB trades to Notion and return uploaded count."""
+    new_records = fetch_new_ib_trades(ib)
+    if not new_records:
+        logger.info("No new trades to upload to Notion.")
+        return 0
+
+    notion_existing_ids = fetch_existing_notion_order_ids()
+    uploaded = 0
+    for record in new_records:
+        if str(record["order_id"]) not in notion_existing_ids:
+            push_trade_to_notion(record)
+            uploaded += 1
+    logger.info(f"Uploaded {uploaded} new trades to Notion.")
+    return uploaded
+
+
 def main():
     """Main function to synchronize trades."""
-    # Initialize IB connection
     ib = connect_ib()
     if not ib:
         logger.error("Failed to connect to Interactive Brokers.")
         return
-
-    # Fetch new trades
-    new_records = fetch_new_ib_trades(ib)
-
-    if new_records:
-        notion_existing_ids = fetch_existing_notion_order_ids()
-        uploaded = 0
-
-        for record in new_records:
-            if str(record["order_id"]) not in notion_existing_ids:
-                push_trade_to_notion(record)
-                uploaded += 1
-
-        logger.info(f"Uploaded {uploaded} new trades to Notion.")
-    else:
-        logger.info("No new trades to upload to Notion.")
-
-    ib.disconnect()
+    try:
+        sync_order_history(ib)
+    finally:
+        ib.disconnect()
 
 if __name__ == "__main__":
     main()

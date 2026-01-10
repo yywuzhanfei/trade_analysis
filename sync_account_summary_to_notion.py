@@ -143,12 +143,7 @@ def update_code_block(block_id: str, content: str) -> bool:
     return False
 
 
-def main() -> None:
-    ib = connect_ib()
-    if not ib:
-        logger.error("Failed to connect to Interactive Brokers.")
-        return
-
+def sync_account_summary(ib) -> bool:
     values = ib.accountSummary() + ib.accountValues(account=ACCOUNT)
     blocks = fetch_page_blocks(ACCOUNT_SUMMARY_PAGE)
     block_id = find_code_block_after_heading(blocks, ACCOUNT_SUMMARY_HEADING)
@@ -158,13 +153,24 @@ def main() -> None:
             ACCOUNT_SUMMARY_HEADING,
             ACCOUNT_SUMMARY_PAGE,
         )
-        ib.disconnect()
-        return
+        return False
 
     content = format_account_summary(values)
     if update_code_block(block_id, content):
         logger.info("Updated account summary code block.")
-    ib.disconnect()
+        return True
+    return False
+
+
+def main() -> None:
+    ib = connect_ib()
+    if not ib:
+        logger.error("Failed to connect to Interactive Brokers.")
+        return
+    try:
+        sync_account_summary(ib)
+    finally:
+        ib.disconnect()
 
 
 if __name__ == "__main__":
