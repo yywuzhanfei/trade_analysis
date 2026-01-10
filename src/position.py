@@ -1,8 +1,7 @@
-from ib_insync import IB, MarketOrder, Position
+from ib_insync import IB, MarketOrder
 from ib_insync.objects import Position
 from typing import List, Tuple
 import logging
-from src.constants import ACCOUNT
 
 logger = logging.getLogger(__name__)
 

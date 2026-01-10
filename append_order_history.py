@@ -1,5 +1,3 @@
-from ib_insync import *
-
 from src.client import connect_ib
 from src.constants import NOTION_DB, NOTION_HEADERS
 import logging
